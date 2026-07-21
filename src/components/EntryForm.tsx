@@ -122,19 +122,15 @@ export default function EntryForm({
           
           {/* Situation */}
           <div>
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="text-xs uppercase tracking-wider font-semibold text-[#6e7b61] bg-[#728264]/10 py-1 px-2.5 rounded-md">1. Auslöser</span>
-            </div>
-            <label htmlFor="situation" className="block text-sm font-bold text-[#3D3D3D] mb-1">
-              Situation / Was ist passiert?
+            <label htmlFor="situation" className="block text-sm font-bold text-[#3D3D3D] mb-1.5">
+              1. Auslöser / Situation
             </label>
-            <p className="text-xs text-gray-500 mb-2">Wo warst du? Wer war dabei? Was genau ist passiert?</p>
             <textarea
               id="situation"
               ref={textareaRefs.situation}
               value={situation}
               onChange={(e) => setSituation(e.target.value)}
-              placeholder="z.B. Mein Chef hat mich kurzfristig zu einem Gespräch gerufen..."
+              placeholder="Wo warst du? Wer war dabei? Was genau ist passiert? (z.B. Mein Chef hat mich kurzfristig zu einem Gespräch gerufen...)"
               rows={2}
               className="w-full p-3.5 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#3D3D3D] text-sm focus:border-[#728264] focus:ring-2 focus:ring-[#728264]/15 outline-none transition-all resize-none min-h-[70px]"
             />
@@ -142,19 +138,15 @@ export default function EntryForm({
 
           {/* Gedanken */}
           <div>
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="text-xs uppercase tracking-wider font-semibold text-[#6e7b61] bg-[#728264]/10 py-1 px-2.5 rounded-md">2. Kognition</span>
-            </div>
-            <label htmlFor="gedanken" className="block text-sm font-bold text-[#3D3D3D] mb-1">
-              Gedanken / Was ging dir durch den Kopf?
+            <label htmlFor="gedanken" className="block text-sm font-bold text-[#3D3D3D] mb-1.5">
+              2. Gedanken / Kognition
             </label>
-            <p className="text-xs text-gray-500 mb-2">Welche automatischen Gedanken oder Bewertungen hattest du?</p>
             <textarea
               id="gedanken"
               ref={textareaRefs.gedanken}
               value={gedanken}
               onChange={(e) => setGedanken(e.target.value)}
-              placeholder="z.B. Ich habe bestimmt etwas falsch gemacht. Er wird mich kündigen..."
+              placeholder="Was ging dir durch den Kopf? Welche automatischen Bewertungen oder Zweifel hattest du? (z.B. Ich habe bestimmt etwas falsch gemacht...)"
               rows={2}
               className="w-full p-3.5 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#3D3D3D] text-sm focus:border-[#728264] focus:ring-2 focus:ring-[#728264]/15 outline-none transition-all resize-none min-h-[70px]"
             />
@@ -162,18 +154,13 @@ export default function EntryForm({
 
           {/* Gefühle */}
           <div>
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="text-xs uppercase tracking-wider font-semibold text-[#6e7b61] bg-[#728264]/10 py-1 px-2.5 rounded-md">3. Emotionen</span>
-            </div>
-            <label className="block text-sm font-bold text-[#3D3D3D] mb-1">
-              Gefühle / Emotionen
+            <label className="block text-sm font-bold text-[#3D3D3D] mb-1.5">
+              3. Gefühle / Emotionen
             </label>
-            <p className="text-xs text-gray-500 mb-3">Wie hast du dich in dieser Situation gefühlt?</p>
-            
             <button
               type="button"
               onClick={() => setActiveModal('gefuehle')}
-              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 border-dashed border-[#728264] text-[#728264] hover:bg-[#728264]/5 font-semibold text-sm transition-all"
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#728264] hover:bg-[#728264]/5 font-semibold text-sm transition-all"
             >
               <Smile size={18} />
               {selectedGefuehle.length > 0 
@@ -182,12 +169,12 @@ export default function EntryForm({
             </button>
 
             {selectedGefuehle.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 mt-3">
+              <div className="flex flex-wrap gap-1.5 mt-2">
                 {selectedGefuehle.map(g => (
                   <span 
                     key={g} 
                     onClick={() => toggleGefuehl(g)}
-                    className="inline-flex items-center gap-1.5 bg-[#728264] text-[#F4F1EA] text-xs font-semibold px-3 py-1.5 rounded-full cursor-pointer hover:bg-[#804A4A] hover:line-through transition-all"
+                    className="inline-flex items-center gap-1.5 bg-[#728264] text-[#F4F1EA] text-xs font-semibold px-2.5 py-1.5 rounded-full cursor-pointer hover:bg-[#804A4A] hover:line-through transition-all"
                     title="Klicken zum Entfernen"
                   >
                     {g}
@@ -199,32 +186,27 @@ export default function EntryForm({
 
           {/* Körperliche Reaktionen */}
           <div>
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="text-xs uppercase tracking-wider font-semibold text-[#6e7b61] bg-[#728264]/10 py-1 px-2.5 rounded-md">4. Physiologie</span>
-            </div>
-            <label className="block text-sm font-bold text-[#3D3D3D] mb-1">
-              Körperliche Reaktionen
+            <label className="block text-sm font-bold text-[#3D3D3D] mb-1.5">
+              4. Körperliche Reaktionen / Physiologie
             </label>
-            <p className="text-xs text-gray-500 mb-3">Welche körperlichen Symptome konntest du wahrnehmen?</p>
-            
             <button
               type="button"
               onClick={() => setActiveModal('koerper')}
-              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 border-dashed border-[#728264] text-[#728264] hover:bg-[#728264]/5 font-semibold text-sm transition-all"
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#728264] hover:bg-[#728264]/5 font-semibold text-sm transition-all"
             >
               <Activity size={18} />
               {selectedKoerper.length > 0 
                 ? `Reaktionen anpassen (${selectedKoerper.length} ausgewählt)` 
-                : 'Reaktionen auswählen...'}
+                : 'Symptome auswählen...'}
             </button>
 
             {selectedKoerper.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 mt-3">
+              <div className="flex flex-wrap gap-1.5 mt-2">
                 {selectedKoerper.map(k => (
                   <span 
                     key={k} 
                     onClick={() => toggleKoerper(k)}
-                    className="inline-flex items-center gap-1.5 bg-[#728264] text-[#F4F1EA] text-xs font-semibold px-3 py-1.5 rounded-full cursor-pointer hover:bg-[#804A4A] hover:line-through transition-all"
+                    className="inline-flex items-center gap-1.5 bg-[#728264] text-[#F4F1EA] text-xs font-semibold px-2.5 py-1.5 rounded-full cursor-pointer hover:bg-[#804A4A] hover:line-through transition-all"
                     title="Klicken zum Entfernen"
                   >
                     {k}
@@ -236,19 +218,15 @@ export default function EntryForm({
 
           {/* Verhalten */}
           <div>
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="text-xs uppercase tracking-wider font-semibold text-[#6e7b61] bg-[#728264]/10 py-1 px-2.5 rounded-md">5. Verhalten</span>
-            </div>
-            <label htmlFor="verhalten" className="block text-sm font-bold text-[#3D3D3D] mb-1">
-              Verhalten / Was hast du getan?
+            <label htmlFor="verhalten" className="block text-sm font-bold text-[#3D3D3D] mb-1.5">
+              5. Verhalten / Reaktion
             </label>
-            <p className="text-xs text-gray-500 mb-2">Wie hast du reagiert? Was hast du gesagt oder getan (oder vermieden)?</p>
             <textarea
               id="verhalten"
               ref={textareaRefs.verhalten}
               value={verhalten}
               onChange={(e) => setVerhalten(e.target.value)}
-              placeholder="z.B. Ich habe hektisch genickt, mich sofort entschuldigt und versucht mich zu erklären..."
+              placeholder="Wie hast du reagiert? Was hast du gesagt, getan oder vermieden? (z.B. Ich habe hektisch genickt und versucht mich zu erklären...)"
               rows={2}
               className="w-full p-3.5 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#3D3D3D] text-sm focus:border-[#728264] focus:ring-2 focus:ring-[#728264]/15 outline-none transition-all resize-none min-h-[70px]"
             />
@@ -256,19 +234,15 @@ export default function EntryForm({
 
           {/* Resultat (kurzfristig) */}
           <div>
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="text-xs uppercase tracking-wider font-semibold text-[#6e7b61] bg-[#728264]/10 py-1 px-2.5 rounded-md">6. Konsequenzen (Kurz)</span>
-            </div>
-            <label htmlFor="resultat_kurz" className="block text-sm font-bold text-[#3D3D3D] mb-1">
-              Resultat (kurzfristig)
+            <label htmlFor="resultat_kurz" className="block text-sm font-bold text-[#3D3D3D] mb-1.5">
+              6. Resultat (kurzfristig) / Konsequenzen
             </label>
-            <p className="text-xs text-gray-500 mb-2">Was war die sofortige Auswirkung auf dich oder die Situation?</p>
             <textarea
               id="resultat_kurz"
               ref={textareaRefs.resultatKurz}
               value={resultatKurz}
               onChange={(e) => setResultatKurz(e.target.value)}
-              placeholder="z.B. Kurzfristig nahm die Anspannung ab, aber ich fühlte mich gedemütigt..."
+              placeholder="Was war die sofortige Auswirkung auf dich oder die Situation? (z.B. Kurzfristig nahm die Anspannung ab, aber ich fühlte mich beschämt...)"
               rows={2}
               className="w-full p-3.5 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#3D3D3D] text-sm focus:border-[#728264] focus:ring-2 focus:ring-[#728264]/15 outline-none transition-all resize-none min-h-[70px]"
             />
@@ -276,19 +250,15 @@ export default function EntryForm({
 
           {/* Resultat (langfristig) */}
           <div>
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="text-xs uppercase tracking-wider font-semibold text-[#6e7b61] bg-[#728264]/10 py-1 px-2.5 rounded-md">7. Konsequenzen (Lang)</span>
-            </div>
-            <label htmlFor="resultat_lang" className="block text-sm font-bold text-[#3D3D3D] mb-1">
-              Resultat (langfristig)
+            <label htmlFor="resultat_lang" className="block text-sm font-bold text-[#3D3D3D] mb-1.5">
+              7. Resultat (langfristig) / Konsequenzen
             </label>
-            <p className="text-xs text-gray-500 mb-2">Welche dauerhaften Folgen hat dieses Verhaltensmuster für dich?</p>
             <textarea
               id="resultat_lang"
               ref={textareaRefs.resultatLang}
               value={resultatLang}
               onChange={(e) => setResultatLang(e.target.value)}
-              placeholder="z.B. Ich gehe meinem Chef aus dem Weg, meine Angst vor Kritik wächst weiter..."
+              placeholder="Welche dauerhaften Folgen hat dieses Verhaltensmuster für dich im Alltag? (z.B. Ich gehe Konflikten aus dem Weg, meine Ängste wachsen...)"
               rows={2}
               className="w-full p-3.5 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#3D3D3D] text-sm focus:border-[#728264] focus:ring-2 focus:ring-[#728264]/15 outline-none transition-all resize-none min-h-[70px]"
             />
