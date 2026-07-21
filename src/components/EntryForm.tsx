@@ -130,7 +130,7 @@ export default function EntryForm({
               ref={textareaRefs.situation}
               value={situation}
               onChange={(e) => setSituation(e.target.value)}
-              placeholder="Wo warst du? Wer war dabei? Was genau ist passiert? (z.B. Mein Chef hat mich kurzfristig zu einem Gespräch gerufen...)"
+              placeholder="Wo warst du? Wer war dabei? Was genau ist passiert?"
               rows={2}
               className="w-full p-3.5 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#3D3D3D] text-sm focus:border-[#728264] focus:ring-2 focus:ring-[#728264]/15 outline-none transition-all resize-none min-h-[70px]"
             />
@@ -146,7 +146,7 @@ export default function EntryForm({
               ref={textareaRefs.gedanken}
               value={gedanken}
               onChange={(e) => setGedanken(e.target.value)}
-              placeholder="Was ging dir durch den Kopf? Welche automatischen Bewertungen oder Zweifel hattest du? (z.B. Ich habe bestimmt etwas falsch gemacht...)"
+              placeholder="Was ging dir durch den Kopf? Welche automatischen Bewertungen oder Zweifel hattest du?"
               rows={2}
               className="w-full p-3.5 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#3D3D3D] text-sm focus:border-[#728264] focus:ring-2 focus:ring-[#728264]/15 outline-none transition-all resize-none min-h-[70px]"
             />
@@ -226,7 +226,7 @@ export default function EntryForm({
               ref={textareaRefs.verhalten}
               value={verhalten}
               onChange={(e) => setVerhalten(e.target.value)}
-              placeholder="Wie hast du reagiert? Was hast du gesagt, getan oder vermieden? (z.B. Ich habe hektisch genickt und versucht mich zu erklären...)"
+              placeholder="Wie hast du reagiert? Was hast du gesagt, getan oder vermieden?"
               rows={2}
               className="w-full p-3.5 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#3D3D3D] text-sm focus:border-[#728264] focus:ring-2 focus:ring-[#728264]/15 outline-none transition-all resize-none min-h-[70px]"
             />
@@ -242,7 +242,7 @@ export default function EntryForm({
               ref={textareaRefs.resultatKurz}
               value={resultatKurz}
               onChange={(e) => setResultatKurz(e.target.value)}
-              placeholder="Was war die sofortige Auswirkung auf dich oder die Situation? (z.B. Kurzfristig nahm die Anspannung ab, aber ich fühlte mich beschämt...)"
+              placeholder="Was war die sofortige Auswirkung auf dich oder die Situation?"
               rows={2}
               className="w-full p-3.5 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#3D3D3D] text-sm focus:border-[#728264] focus:ring-2 focus:ring-[#728264]/15 outline-none transition-all resize-none min-h-[70px]"
             />
