@@ -130,7 +130,7 @@ export default function EntryForm({
               ref={textareaRefs.situation}
               value={situation}
               onChange={(e) => setSituation(e.target.value)}
-              placeholder="Wo warst du? Wer war dabei? Was genau ist passiert?"
+              placeholder="Wo warst du? Wer war dabei? Was genau ist passiert? (z.B. Mein Chef hat mich kurzfristig zu einem Gespräch gerufen...)"
               rows={2}
               className="w-full p-3.5 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#3D3D3D] text-sm focus:border-[#728264] focus:ring-2 focus:ring-[#728264]/15 outline-none transition-all resize-none min-h-[70px]"
             />
@@ -146,7 +146,7 @@ export default function EntryForm({
               ref={textareaRefs.gedanken}
               value={gedanken}
               onChange={(e) => setGedanken(e.target.value)}
-              placeholder="Was ging dir durch den Kopf? Welche automatischen Bewertungen oder Zweifel hattest du?"
+              placeholder="Was ging dir durch den Kopf? Welche automatischen Bewertungen oder Zweifel hattest du? (z.B. Ich habe bestimmt etwas falsch gemacht...)"
               rows={2}
               className="w-full p-3.5 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#3D3D3D] text-sm focus:border-[#728264] focus:ring-2 focus:ring-[#728264]/15 outline-none transition-all resize-none min-h-[70px]"
             />
@@ -226,7 +226,7 @@ export default function EntryForm({
               ref={textareaRefs.verhalten}
               value={verhalten}
               onChange={(e) => setVerhalten(e.target.value)}
-              placeholder="Wie hast du reagiert? Was hast du gesagt, getan oder vermieden?"
+              placeholder="Wie hast du reagiert? Was hast du gesagt, getan oder vermieden? (z.B. Ich habe hektisch genickt und versucht mich zu erklären...)"
               rows={2}
               className="w-full p-3.5 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#3D3D3D] text-sm focus:border-[#728264] focus:ring-2 focus:ring-[#728264]/15 outline-none transition-all resize-none min-h-[70px]"
             />
@@ -235,14 +235,14 @@ export default function EntryForm({
           {/* Resultat (kurzfristig) */}
           <div>
             <label htmlFor="resultat_kurz" className="block text-sm font-bold text-[#3D3D3D] mb-1.5">
-              6. Resultat (kurzfristig)
+              6. Resultat (kurzfristig) / Konsequenzen
             </label>
             <textarea
               id="resultat_kurz"
               ref={textareaRefs.resultatKurz}
               value={resultatKurz}
               onChange={(e) => setResultatKurz(e.target.value)}
-              placeholder="Was war die sofortige Auswirkung auf dich oder die Situation?"
+              placeholder="Was war die sofortige Auswirkung auf dich oder die Situation? (z.B. Kurzfristig nahm die Anspannung ab, aber ich fühlte mich beschämt...)"
               rows={2}
               className="w-full p-3.5 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#3D3D3D] text-sm focus:border-[#728264] focus:ring-2 focus:ring-[#728264]/15 outline-none transition-all resize-none min-h-[70px]"
             />
@@ -251,14 +251,14 @@ export default function EntryForm({
           {/* Resultat (langfristig) */}
           <div>
             <label htmlFor="resultat_lang" className="block text-sm font-bold text-[#3D3D3D] mb-1.5">
-              7. Resultat (langfristig)
+              7. Resultat (langfristig) / Konsequenzen
             </label>
             <textarea
               id="resultat_lang"
               ref={textareaRefs.resultatLang}
               value={resultatLang}
               onChange={(e) => setResultatLang(e.target.value)}
-              placeholder="Welche dauerhaften Folgen hat dieses Verhaltensmuster für dich im Alltag?"
+              placeholder="Welche dauerhaften Folgen hat dieses Verhaltensmuster für dich im Alltag? (z.B. Ich gehe Konflikten aus dem Weg, meine Ängste wachsen...)"
               rows={2}
               className="w-full p-3.5 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#3D3D3D] text-sm focus:border-[#728264] focus:ring-2 focus:ring-[#728264]/15 outline-none transition-all resize-none min-h-[70px]"
             />

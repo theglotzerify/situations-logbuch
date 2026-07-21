@@ -1,4 +1,4 @@
-const CACHE_NAME = 'therapie-logbuch-v3';
+const CACHE_NAME = 'therapie-logbuch-v4';
 const ASSETS = [
   './',
   './index.html',
