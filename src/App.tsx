@@ -48,6 +48,15 @@ export default function App() {
     }
   }, []);
 
+  // Reset scroll position to top when switching views
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    const mainEl = document.querySelector('main');
+    if (mainEl) {
+      mainEl.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }
+  }, [currentView]);
+
   // Save changes helper
   const handleUpdateEntries = (newEntries: LogEntry[]) => {
     setEntries(newEntries);
@@ -134,7 +143,7 @@ export default function App() {
       </header>
 
       {/* Main View Sandbox */}
-      <main className="flex-1 px-4 py-6 md:py-8 overflow-y-auto max-w-7xl w-full mx-auto pb-28">
+      <main className="flex-1 px-4 py-6 md:py-8 max-w-7xl w-full mx-auto pb-28">
         <div className="animate-fadeIn">
           {currentView === 'form' && (
             <EntryForm
