@@ -235,7 +235,7 @@ export default function EntryForm({
           {/* Resultat (kurzfristig) */}
           <div>
             <label htmlFor="resultat_kurz" className="block text-sm font-bold text-[#3D3D3D] mb-1.5">
-              6. Resultat (kurzfristig) / Konsequenzen
+              6. Resultat (kurzfristig)
             </label>
             <textarea
               id="resultat_kurz"
@@ -251,14 +251,14 @@ export default function EntryForm({
           {/* Resultat (langfristig) */}
           <div>
             <label htmlFor="resultat_lang" className="block text-sm font-bold text-[#3D3D3D] mb-1.5">
-              7. Resultat (langfristig) / Konsequenzen
+              7. Resultat (langfristig)
             </label>
             <textarea
               id="resultat_lang"
               ref={textareaRefs.resultatLang}
               value={resultatLang}
               onChange={(e) => setResultatLang(e.target.value)}
-              placeholder="Welche dauerhaften Folgen hat dieses Verhaltensmuster für dich im Alltag? (z.B. Ich gehe Konflikten aus dem Weg, meine Ängste wachsen...)"
+              placeholder="Welche dauerhaften Folgen hat dieses Verhaltensmuster für dich im Alltag?"
               rows={2}
               className="w-full p-3.5 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#3D3D3D] text-sm focus:border-[#728264] focus:ring-2 focus:ring-[#728264]/15 outline-none transition-all resize-none min-h-[70px]"
             />
