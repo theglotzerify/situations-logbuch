@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Check } from 'lucide-react';
+import { X } from 'lucide-react';
 
 interface ModalProps {
   isOpen: boolean;
@@ -53,14 +53,13 @@ export default function Modal({
                     key={option}
                     type="button"
                     onClick={() => onToggleOption(option)}
-                    className={`inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border text-xs sm:text-sm font-semibold transition-all ${
+                    className={`inline-flex items-center px-3.5 py-2.5 rounded-xl border text-xs sm:text-sm font-semibold transition-all ${
                       isSelected
                         ? 'bg-[#728264] text-white border-[#728264] shadow-xs'
                         : 'bg-[#FCFAF5] text-[#3D3D3D] border-[#D1CBBB] hover:border-[#728264]'
                     }`}
                   >
                     <span>{option}</span>
-                    {isSelected && <Check size={14} className="text-white shrink-0" />}
                   </button>
                 );
               })}
