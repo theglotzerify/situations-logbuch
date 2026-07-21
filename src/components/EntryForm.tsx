@@ -155,7 +155,7 @@ export default function EntryForm({
           {/* Gefühle */}
           <div>
             <label className="block text-sm font-bold text-[#3D3D3D] mb-1.5">
-              3. Gefühle / Emotionen
+              3. Gefühle
             </label>
             <button
               type="button"
@@ -187,7 +187,7 @@ export default function EntryForm({
           {/* Körperliche Reaktionen */}
           <div>
             <label className="block text-sm font-bold text-[#3D3D3D] mb-1.5">
-              4. Körperliche Reaktionen / Physiologie
+              4. Körperliche Reaktionen
             </label>
             <button
               type="button"
