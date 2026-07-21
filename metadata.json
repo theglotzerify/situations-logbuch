@@ -1,0 +1,6 @@
+{
+  "name": "Therapie Logbuch",
+  "description": "Ein mobiles Situationslogbuch für die Kognitive Verhaltenstherapie (CBT) mit Daten-Export/Import.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
