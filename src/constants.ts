@@ -32,5 +32,6 @@ export const DEFAULT_KOERPER = [
 export const KEYS = {
   ENTRIES: 'therapieTracker',
   OPTIONS_GEFUEHLE: 'optionsGefuehle',
-  OPTIONS_KOERPER: 'optionsKoerper'
+  OPTIONS_KOERPER: 'optionsKoerper',
+  THEME: 'therapieTheme'
 };

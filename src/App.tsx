@@ -1,20 +1,82 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { LogEntry, ViewType } from './types';
 import { KEYS, DEFAULT_GEFUEHLE, DEFAULT_KOERPER } from './constants';
 import EntryForm from './components/EntryForm';
 import EntryList from './components/EntryList';
 import Statistics from './components/Statistics';
 import SettingsView from './components/SettingsView';
-import { PenSquare, BookOpen, BarChart3, Settings, Heart } from 'lucide-react';
+import { PenSquare, BookOpen, BarChart3, Settings, Heart, Sun, Moon } from 'lucide-react';
 
 export default function App() {
   const [currentView, setCurrentView] = useState<ViewType>('form');
   
+  // Touch Swipe Navigation Ref
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+
+  const viewsOrder: ViewType[] = ['form', 'list', 'stats', 'settings'];
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null || touchStartY.current === null) return;
+
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+
+    const deltaX = touchEndX - touchStartX.current;
+    const deltaY = touchEndY - touchStartY.current;
+
+    touchStartX.current = null;
+    touchStartY.current = null;
+
+    // Minimum distance threshold (60px) and horizontal angle check
+    if (Math.abs(deltaX) > 60 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
+      const currentIndex = viewsOrder.indexOf(currentView);
+      if (deltaX < 0 && currentIndex < viewsOrder.length - 1) {
+        // Swipe Left -> Next Tab
+        setCurrentView(viewsOrder[currentIndex + 1]);
+      } else if (deltaX > 0 && currentIndex > 0) {
+        // Swipe Right -> Previous Tab
+        setCurrentView(viewsOrder[currentIndex - 1]);
+      }
+    }
+  };
+
   // App states
   const [entries, setEntries] = useState<LogEntry[]>([]);
   const [optionsGefuehle, setOptionsGefuehle] = useState<string[]>([]);
   const [optionsKoerper, setOptionsKoerper] = useState<string[]>([]);
   
+  // Dark mode state
+  const [darkMode, setDarkMode] = useState<boolean>(() => {
+    try {
+      const savedTheme = localStorage.getItem(KEYS.THEME);
+      if (savedTheme) return savedTheme === 'dark';
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    } catch {
+      return false;
+    }
+  });
+
+  // Apply dark mode class to html document
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem(KEYS.THEME, 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem(KEYS.THEME, 'light');
+    }
+  }, [darkMode]);
+
+  const handleToggleDarkMode = () => {
+    setDarkMode(prev => !prev);
+  };
+
   // Edit state
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
@@ -50,11 +112,9 @@ export default function App() {
 
   // Reset scroll position to top when switching views
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    const mainEl = document.querySelector('main');
-    if (mainEl) {
-      mainEl.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    }
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
   }, [currentView]);
 
   // Save changes helper
@@ -130,20 +190,35 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#4A5340] text-[#3D3D3D] flex flex-col font-sans selection:bg-[#728264] selection:text-white">
+    <div className="min-h-screen bg-[#4A5340] dark:bg-[#181C17] text-[#3D3D3D] dark:text-[#EAE6DB] flex flex-col font-sans selection:bg-[#728264] selection:text-white transition-colors">
       
       {/* Header Bar */}
-      <header className="w-full bg-[#4A5340] py-5 px-4 text-center shrink-0 border-b border-[#FCFAF5]/10 sticky top-0 z-40">
-        <div className="max-w-2xl mx-auto flex items-center justify-center gap-2">
-          <Heart size={22} className="text-[#EAE6DB] fill-[#EAE6DB] shrink-0" />
-          <h1 className="text-xl md:text-2xl font-black text-[#EAE6DB] tracking-wide">
-            {viewTitles[currentView]}
-          </h1>
+      <header className="w-full bg-[#4A5340] dark:bg-[#181C17] py-4 px-4 text-center shrink-0 border-b border-[#FCFAF5]/10 dark:border-[#384133] sticky top-0 z-40 transition-colors">
+        <div className="max-w-2xl mx-auto flex items-center justify-between">
+          <div className="w-8"></div> {/* spacer for centering */}
+          <div className="flex items-center justify-center gap-2">
+            <Heart size={22} className="text-[#EAE6DB] fill-[#EAE6DB] shrink-0" />
+            <h1 className="text-xl md:text-2xl font-black text-[#EAE6DB] tracking-wide">
+              {viewTitles[currentView]}
+            </h1>
+          </div>
+          {/* Quick theme toggle button in header */}
+          <button
+            onClick={handleToggleDarkMode}
+            className="p-2 rounded-xl bg-[#FCFAF5]/10 dark:bg-[#252B21] text-[#EAE6DB] hover:bg-[#FCFAF5]/20 dark:hover:bg-[#384133] transition-all flex items-center justify-center"
+            title={darkMode ? 'Helles Design aktivieren' : 'Dunkles Design aktivieren'}
+          >
+            {darkMode ? <Sun size={18} className="text-amber-300" /> : <Moon size={18} className="text-[#EAE6DB]" />}
+          </button>
         </div>
       </header>
 
       {/* Main View Sandbox */}
-      <main className="flex-1 px-4 py-6 md:py-8 max-w-7xl w-full mx-auto pb-28">
+      <main 
+        className="flex-1 px-4 py-6 md:py-10 max-w-7xl w-full mx-auto pb-28 md:pb-36"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <div className="animate-fadeIn">
           {currentView === 'form' && (
             <EntryForm
@@ -174,6 +249,8 @@ export default function App() {
               optionsGefuehle={optionsGefuehle}
               optionsKoerper={optionsKoerper}
               entries={entries}
+              darkMode={darkMode}
+              onToggleDarkMode={handleToggleDarkMode}
               onUpdateGefuehle={handleUpdateGefuehle}
               onUpdateKoerper={handleUpdateKoerper}
               onUpdateEntries={handleUpdateEntries}
@@ -183,16 +260,16 @@ export default function App() {
         </div>
       </main>
 
-      {/* Android Mobile Native-Like Bottom Bar */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-[#F4F1EA] border-t border-[#D1CBBB] px-2 py-2 flex justify-around items-center z-40 shadow-[0_-4px_16px_rgba(0,0,0,0.12)]">
+      {/* Android Mobile & Tablet Floating Bottom Bar */}
+      <nav className="fixed bottom-0 left-0 right-0 md:bottom-4 md:max-w-md md:mx-auto bg-[#F4F1EA] dark:bg-[#252B21] border-t md:border border-[#D1CBBB] dark:border-[#384133] md:rounded-2xl px-2 py-2 flex justify-around items-center z-40 shadow-[0_-4px_16px_rgba(0,0,0,0.12)] md:shadow-lg transition-colors">
         
         {/* Navigation buttons */}
         <button
           onClick={() => { setEditingIndex(null); setCurrentView('form'); }}
           className={`flex flex-col items-center justify-center gap-1.5 py-1 px-4 rounded-xl transition-all text-xs font-bold active:scale-95 ${
             currentView === 'form' 
-              ? 'text-[#728264] scale-105' 
-              : 'text-[#3D3D3D]/50 hover:text-[#3D3D3D]/80'
+              ? 'text-[#728264] dark:text-[#9BB08A] scale-105' 
+              : 'text-[#3D3D3D]/50 dark:text-[#EAE6DB]/60 hover:text-[#3D3D3D]/80 dark:hover:text-[#EAE6DB]'
           }`}
         >
           <PenSquare size={20} className={currentView === 'form' ? 'stroke-[2.5]' : 'stroke-[2]'} />
@@ -203,8 +280,8 @@ export default function App() {
           onClick={() => setCurrentView('list')}
           className={`flex flex-col items-center justify-center gap-1.5 py-1 px-4 rounded-xl transition-all text-xs font-bold active:scale-95 ${
             currentView === 'list' 
-              ? 'text-[#728264] scale-105' 
-              : 'text-[#3D3D3D]/50 hover:text-[#3D3D3D]/80'
+              ? 'text-[#728264] dark:text-[#9BB08A] scale-105' 
+              : 'text-[#3D3D3D]/50 dark:text-[#EAE6DB]/60 hover:text-[#3D3D3D]/80 dark:hover:text-[#EAE6DB]'
           }`}
         >
           <BookOpen size={20} className={currentView === 'list' ? 'stroke-[2.5]' : 'stroke-[2]'} />
@@ -215,8 +292,8 @@ export default function App() {
           onClick={() => setCurrentView('stats')}
           className={`flex flex-col items-center justify-center gap-1.5 py-1 px-4 rounded-xl transition-all text-xs font-bold active:scale-95 ${
             currentView === 'stats' 
-              ? 'text-[#728264] scale-105' 
-              : 'text-[#3D3D3D]/50 hover:text-[#3D3D3D]/80'
+              ? 'text-[#728264] dark:text-[#9BB08A] scale-105' 
+              : 'text-[#3D3D3D]/50 dark:text-[#EAE6DB]/60 hover:text-[#3D3D3D]/80 dark:hover:text-[#EAE6DB]'
           }`}
         >
           <BarChart3 size={20} className={currentView === 'stats' ? 'stroke-[2.5]' : 'stroke-[2]'} />
@@ -227,8 +304,8 @@ export default function App() {
           onClick={() => setCurrentView('settings')}
           className={`flex flex-col items-center justify-center gap-1.5 py-1 px-4 rounded-xl transition-all text-xs font-bold active:scale-95 ${
             currentView === 'settings' 
-              ? 'text-[#728264] scale-105' 
-              : 'text-[#3D3D3D]/50 hover:text-[#3D3D3D]/80'
+              ? 'text-[#728264] dark:text-[#9BB08A] scale-105' 
+              : 'text-[#3D3D3D]/50 dark:text-[#EAE6DB]/60 hover:text-[#3D3D3D]/80 dark:hover:text-[#EAE6DB]'
           }`}
         >
           <Settings size={20} className={currentView === 'settings' ? 'stroke-[2.5]' : 'stroke-[2]'} />
@@ -240,3 +317,4 @@ export default function App() {
     </div>
   );
 }
+

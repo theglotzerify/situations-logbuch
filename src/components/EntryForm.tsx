@@ -116,13 +116,13 @@ export default function EntryForm({
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto pb-4">
-      <div className="bg-[#F4F1EA] rounded-2xl shadow-lg border border-[#D1CBBB]/50 p-5 md:p-6">
+    <div className="w-full max-w-2xl mx-auto pb-2">
+      <div className="bg-[#F4F1EA] dark:bg-[#252B21] rounded-2xl shadow-lg border border-[#D1CBBB]/50 dark:border-[#384133] p-5 md:p-6 transition-colors">
         <form onSubmit={handleSubmit} className="space-y-6">
           
           {/* Situation */}
           <div>
-            <label htmlFor="situation" className="block text-sm font-bold text-[#3D3D3D] mb-1.5">
+            <label htmlFor="situation" className="block text-sm font-bold text-[#3D3D3D] dark:text-[#EAE6DB] mb-1.5">
               1. Situation
             </label>
             <textarea
@@ -132,13 +132,13 @@ export default function EntryForm({
               onChange={(e) => setSituation(e.target.value)}
               placeholder="Wo warst du? Wer war dabei? Was genau ist passiert?"
               rows={2}
-              className="w-full p-3.5 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#3D3D3D] text-sm focus:border-[#728264] focus:ring-2 focus:ring-[#728264]/15 outline-none transition-all resize-none min-h-[70px]"
+              className="w-full p-3.5 rounded-xl border border-[#D1CBBB] dark:border-[#384133] bg-[#FCFAF5] dark:bg-[#1C211B] text-[#3D3D3D] dark:text-[#EAE6DB] placeholder:text-gray-400 dark:placeholder:text-[#838F7A] text-sm focus:border-[#728264] focus:ring-2 focus:ring-[#728264]/15 outline-none transition-all resize-none overflow-hidden min-h-[70px]"
             />
           </div>
 
           {/* Gedanken */}
           <div>
-            <label htmlFor="gedanken" className="block text-sm font-bold text-[#3D3D3D] mb-1.5">
+            <label htmlFor="gedanken" className="block text-sm font-bold text-[#3D3D3D] dark:text-[#EAE6DB] mb-1.5">
               2. Gedanken
             </label>
             <textarea
@@ -148,19 +148,19 @@ export default function EntryForm({
               onChange={(e) => setGedanken(e.target.value)}
               placeholder="Was ging dir durch den Kopf? Welche automatischen Bewertungen oder Zweifel hattest du?"
               rows={2}
-              className="w-full p-3.5 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#3D3D3D] text-sm focus:border-[#728264] focus:ring-2 focus:ring-[#728264]/15 outline-none transition-all resize-none min-h-[70px]"
+              className="w-full p-3.5 rounded-xl border border-[#D1CBBB] dark:border-[#384133] bg-[#FCFAF5] dark:bg-[#1C211B] text-[#3D3D3D] dark:text-[#EAE6DB] placeholder:text-gray-400 dark:placeholder:text-[#838F7A] text-sm focus:border-[#728264] focus:ring-2 focus:ring-[#728264]/15 outline-none transition-all resize-none overflow-hidden min-h-[70px]"
             />
           </div>
 
           {/* Gefühle */}
           <div>
-            <label className="block text-sm font-bold text-[#3D3D3D] mb-1.5">
+            <label className="block text-sm font-bold text-[#3D3D3D] dark:text-[#EAE6DB] mb-1.5">
               3. Gefühle
             </label>
             <button
               type="button"
               onClick={() => setActiveModal('gefuehle')}
-              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#728264] hover:bg-[#728264]/5 font-semibold text-sm transition-all"
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-[#D1CBBB] dark:border-[#384133] bg-[#FCFAF5] dark:bg-[#1C211B] text-[#728264] dark:text-[#9BB08A] hover:bg-[#728264]/5 font-semibold text-sm transition-all"
             >
               <Smile size={18} />
               {selectedGefuehle.length > 0 
@@ -186,13 +186,13 @@ export default function EntryForm({
 
           {/* Körperliche Reaktionen */}
           <div>
-            <label className="block text-sm font-bold text-[#3D3D3D] mb-1.5">
+            <label className="block text-sm font-bold text-[#3D3D3D] dark:text-[#EAE6DB] mb-1.5">
               4. Körperliche Reaktionen
             </label>
             <button
               type="button"
               onClick={() => setActiveModal('koerper')}
-              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#728264] hover:bg-[#728264]/5 font-semibold text-sm transition-all"
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-[#D1CBBB] dark:border-[#384133] bg-[#FCFAF5] dark:bg-[#1C211B] text-[#728264] dark:text-[#9BB08A] hover:bg-[#728264]/5 font-semibold text-sm transition-all"
             >
               <Activity size={18} />
               {selectedKoerper.length > 0 
@@ -218,7 +218,7 @@ export default function EntryForm({
 
           {/* Verhalten */}
           <div>
-            <label htmlFor="verhalten" className="block text-sm font-bold text-[#3D3D3D] mb-1.5">
+            <label htmlFor="verhalten" className="block text-sm font-bold text-[#3D3D3D] dark:text-[#EAE6DB] mb-1.5">
               5. Verhalten
             </label>
             <textarea
@@ -228,13 +228,13 @@ export default function EntryForm({
               onChange={(e) => setVerhalten(e.target.value)}
               placeholder="Wie hast du reagiert? Was hast du gesagt, getan oder vermieden?"
               rows={2}
-              className="w-full p-3.5 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#3D3D3D] text-sm focus:border-[#728264] focus:ring-2 focus:ring-[#728264]/15 outline-none transition-all resize-none min-h-[70px]"
+              className="w-full p-3.5 rounded-xl border border-[#D1CBBB] dark:border-[#384133] bg-[#FCFAF5] dark:bg-[#1C211B] text-[#3D3D3D] dark:text-[#EAE6DB] placeholder:text-gray-400 dark:placeholder:text-[#838F7A] text-sm focus:border-[#728264] focus:ring-2 focus:ring-[#728264]/15 outline-none transition-all resize-none overflow-hidden min-h-[70px]"
             />
           </div>
 
           {/* Resultat (kurzfristig) */}
           <div>
-            <label htmlFor="resultat_kurz" className="block text-sm font-bold text-[#3D3D3D] mb-1.5">
+            <label htmlFor="resultat_kurz" className="block text-sm font-bold text-[#3D3D3D] dark:text-[#EAE6DB] mb-1.5">
               6. Resultat (kurzfristig)
             </label>
             <textarea
@@ -244,13 +244,13 @@ export default function EntryForm({
               onChange={(e) => setResultatKurz(e.target.value)}
               placeholder="Was war die sofortige Auswirkung auf dich oder die Situation?"
               rows={2}
-              className="w-full p-3.5 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#3D3D3D] text-sm focus:border-[#728264] focus:ring-2 focus:ring-[#728264]/15 outline-none transition-all resize-none min-h-[70px]"
+              className="w-full p-3.5 rounded-xl border border-[#D1CBBB] dark:border-[#384133] bg-[#FCFAF5] dark:bg-[#1C211B] text-[#3D3D3D] dark:text-[#EAE6DB] placeholder:text-gray-400 dark:placeholder:text-[#838F7A] text-sm focus:border-[#728264] focus:ring-2 focus:ring-[#728264]/15 outline-none transition-all resize-none overflow-hidden min-h-[70px]"
             />
           </div>
 
           {/* Resultat (langfristig) */}
           <div>
-            <label htmlFor="resultat_lang" className="block text-sm font-bold text-[#3D3D3D] mb-1.5">
+            <label htmlFor="resultat_lang" className="block text-sm font-bold text-[#3D3D3D] dark:text-[#EAE6DB] mb-1.5">
               7. Resultat (langfristig)
             </label>
             <textarea
@@ -260,7 +260,7 @@ export default function EntryForm({
               onChange={(e) => setResultatLang(e.target.value)}
               placeholder="Welche dauerhaften Folgen hat dieses Verhaltensmuster für dich im Alltag?"
               rows={2}
-              className="w-full p-3.5 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#3D3D3D] text-sm focus:border-[#728264] focus:ring-2 focus:ring-[#728264]/15 outline-none transition-all resize-none min-h-[70px]"
+              className="w-full p-3.5 rounded-xl border border-[#D1CBBB] dark:border-[#384133] bg-[#FCFAF5] dark:bg-[#1C211B] text-[#3D3D3D] dark:text-[#EAE6DB] placeholder:text-gray-400 dark:placeholder:text-[#838F7A] text-sm focus:border-[#728264] focus:ring-2 focus:ring-[#728264]/15 outline-none transition-all resize-none overflow-hidden min-h-[70px]"
             />
           </div>
 
@@ -277,7 +277,7 @@ export default function EntryForm({
               <button
                 type="button"
                 onClick={onCancelEdit}
-                className="bg-transparent text-[#804A4A] border-2 border-[#804A4A] hover:bg-[#804A4A]/5 font-bold py-3.5 px-6 rounded-xl text-base transition-all flex items-center justify-center gap-2"
+                className="bg-transparent text-[#804A4A] dark:text-[#D47070] border-2 border-[#804A4A] dark:border-[#D47070] hover:bg-[#804A4A]/5 font-bold py-3.5 px-6 rounded-xl text-base transition-all flex items-center justify-center gap-2"
               >
                 <Undo2 size={18} />
                 Abbrechen

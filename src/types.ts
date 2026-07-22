@@ -13,3 +13,5 @@ export interface LogEntry {
 export type ViewType = 'form' | 'list' | 'stats' | 'settings';
 
 export type FilterMode = 'inclusive' | 'exclusive'; // ODER vs. UND
+
+export type TimeRange = 'all' | '7days' | '30days' | 'thisMonth' | 'lastMonth' | 'thisYear';

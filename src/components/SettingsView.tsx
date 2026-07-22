@@ -1,11 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { LogEntry } from '../types';
-import { Download, Upload, Trash2, Plus, Edit2, AlertTriangle, RefreshCw, FileText } from 'lucide-react';
+import { Download, Upload, Trash2, Plus, Edit2, AlertTriangle, RefreshCw, Sun, Moon } from 'lucide-react';
 
 interface SettingsViewProps {
   optionsGefuehle: string[];
   optionsKoerper: string[];
   entries: LogEntry[];
+  darkMode?: boolean;
+  onToggleDarkMode?: () => void;
   onUpdateGefuehle: (newOptions: string[]) => void;
   onUpdateKoerper: (newOptions: string[]) => void;
   onUpdateEntries: (newEntries: LogEntry[]) => void;
@@ -16,6 +18,8 @@ export default function SettingsView({
   optionsGefuehle,
   optionsKoerper,
   entries,
+  darkMode = false,
+  onToggleDarkMode,
   onUpdateGefuehle,
   onUpdateKoerper,
   onUpdateEntries,
@@ -212,33 +216,68 @@ export default function SettingsView({
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto space-y-6 pb-6">
+    <div className="w-full max-w-2xl mx-auto space-y-6 pb-2">
       
-      {/* 1. Feelings editing */}
-      <div className="bg-[#F4F1EA] rounded-2xl border border-[#D1CBBB]/50 p-5 shadow-sm space-y-4">
-        <div>
-          <h3 className="font-bold text-base text-[#3D3D3D] mb-0.5">Gefühle anpassen</h3>
-          <p className="text-xs text-gray-500">Diese Gefühle stehen dir beim Ausfüllen des Formulars zur Auswahl.</p>
+      {/* 0. Appearance / Dark Mode Toggle Card */}
+      <div className="bg-[#F4F1EA] dark:bg-[#252B21] rounded-2xl border border-[#D1CBBB]/50 dark:border-[#384133] p-5 shadow-sm transition-colors flex items-center justify-between">
+        <div className="space-y-0.5 pr-4">
+          <h3 className="font-bold text-base text-[#3D3D3D] dark:text-[#EAE6DB] flex items-center gap-2">
+            {darkMode ? <Moon size={18} className="text-[#9BB08A]" /> : <Sun size={18} className="text-[#728264]" />}
+            <span>Erscheinungsbild</span>
+          </h3>
+          <p className="text-xs text-gray-500 dark:text-[#A1A89A]">
+            Zwischen hellem und augenschonendem dunklem Modus wechseln.
+          </p>
         </div>
 
-        <div className="flex flex-wrap gap-2 max-h-[220px] overflow-y-auto p-2 bg-[#FCFAF5] rounded-xl border border-[#D1CBBB]/30">
+        <button
+          type="button"
+          onClick={onToggleDarkMode}
+          className={`w-12 h-7 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-200 shrink-0 ${
+            darkMode ? 'bg-[#728264]' : 'bg-[#D1CBBB]'
+          }`}
+          role="switch"
+          aria-checked={darkMode}
+        >
+          <div
+            className={`bg-white w-5 h-5 rounded-full shadow-md transform transition-transform duration-200 flex items-center justify-center shrink-0 ${
+              darkMode ? 'translate-x-5' : 'translate-x-0'
+            }`}
+          >
+            {darkMode ? (
+              <Moon size={12} className="text-[#252B21]" />
+            ) : (
+              <Sun size={12} className="text-[#728264]" />
+            )}
+          </div>
+        </button>
+      </div>
+
+      {/* 1. Feelings editing */}
+      <div className="bg-[#F4F1EA] dark:bg-[#252B21] rounded-2xl border border-[#D1CBBB]/50 dark:border-[#384133] p-5 shadow-sm space-y-4 transition-colors">
+        <div>
+          <h3 className="font-bold text-base text-[#3D3D3D] dark:text-[#EAE6DB] mb-0.5">Gefühle anpassen</h3>
+          <p className="text-xs text-gray-500 dark:text-[#A1A89A]">Diese Gefühle stehen dir beim Ausfüllen des Formulars zur Auswahl.</p>
+        </div>
+
+        <div className="flex flex-wrap gap-2 p-2.5 bg-[#FCFAF5] dark:bg-[#1C211B] rounded-xl border border-[#D1CBBB]/30 dark:border-[#384133] min-h-[48px]">
           {optionsGefuehle.map((item, idx) => (
             <div 
               key={idx} 
-              className="inline-flex items-center gap-1.5 bg-[#E3DEC6] border border-[#D1CBBB] text-[#3D3D3D] text-xs font-semibold pl-3 pr-1.5 py-1.5 rounded-full"
+              className="inline-flex items-center gap-1.5 bg-[#E3DEC6] dark:bg-[#2A3126] border border-[#D1CBBB] dark:border-[#384133] text-[#3D3D3D] dark:text-[#EAE6DB] text-xs font-semibold pl-3 pr-1.5 py-1.5 rounded-full"
             >
               <span>{item}</span>
-              <div className="flex items-center gap-0.5 border-l border-[#D1CBBB]/60 pl-1.5 ml-1">
+              <div className="flex items-center gap-0.5 border-l border-[#D1CBBB]/60 dark:border-[#384133] pl-1.5 ml-1">
                 <button 
                   onClick={() => handleEditGefuehl(idx)}
-                  className="text-gray-500 hover:text-[#728264] p-0.5 rounded-sm"
+                  className="text-gray-500 dark:text-[#A1A89A] hover:text-[#728264] dark:hover:text-[#9BB08A] p-0.5 rounded-sm"
                   title="Bearbeiten"
                 >
                   <Edit2 size={12} />
                 </button>
                 <button 
                   onClick={() => handleRemoveGefuehl(idx)}
-                  className="text-gray-500 hover:text-[#804A4A] p-0.5 rounded-sm"
+                  className="text-gray-500 dark:text-[#A1A89A] hover:text-[#804A4A] dark:hover:text-[#D47070] p-0.5 rounded-sm"
                   title="Entfernen"
                 >
                   <Trash2 size={12} />
@@ -254,11 +293,11 @@ export default function SettingsView({
             value={newGefuehl}
             onChange={(e) => setNewGefuehl(e.target.value)}
             placeholder="Neues Gefühl eintragen..."
-            className="flex-1 px-3.5 py-2 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#3D3D3D] text-sm focus:border-[#728264] outline-none transition-all"
+            className="flex-1 px-3.5 py-2 rounded-xl border border-[#D1CBBB] dark:border-[#384133] bg-[#FCFAF5] dark:bg-[#1C211B] text-[#3D3D3D] dark:text-[#EAE6DB] placeholder:text-gray-400 dark:placeholder:text-[#838F7A] text-sm focus:border-[#728264] outline-none transition-all"
           />
           <button
             type="submit"
-            className="bg-[#728264] hover:bg-[#5f6d53] text-white p-2.5 rounded-xl transition-all shadow-xs"
+            className="bg-[#728264] dark:bg-[#5C6B50] hover:bg-[#5f6d53] text-white p-2.5 rounded-xl transition-all shadow-xs"
           >
             <Plus size={18} />
           </button>
@@ -266,30 +305,30 @@ export default function SettingsView({
       </div>
 
       {/* 2. Physical Reactions editing */}
-      <div className="bg-[#F4F1EA] rounded-2xl border border-[#D1CBBB]/50 p-5 shadow-sm space-y-4">
+      <div className="bg-[#F4F1EA] dark:bg-[#252B21] rounded-2xl border border-[#D1CBBB]/50 dark:border-[#384133] p-5 shadow-sm space-y-4 transition-colors">
         <div>
-          <h3 className="font-bold text-base text-[#3D3D3D] mb-0.5">Körperliche Reaktionen anpassen</h3>
-          <p className="text-xs text-gray-500">Diese Symptome stehen dir beim Ausfüllen des Formulars zur Auswahl.</p>
+          <h3 className="font-bold text-base text-[#3D3D3D] dark:text-[#EAE6DB] mb-0.5">Körperliche Reaktionen anpassen</h3>
+          <p className="text-xs text-gray-500 dark:text-[#A1A89A]">Diese Symptome stehen dir beim Ausfüllen des Formulars zur Auswahl.</p>
         </div>
 
-        <div className="flex flex-wrap gap-2 max-h-[220px] overflow-y-auto p-2 bg-[#FCFAF5] rounded-xl border border-[#D1CBBB]/30">
+        <div className="flex flex-wrap gap-2 p-2.5 bg-[#FCFAF5] dark:bg-[#1C211B] rounded-xl border border-[#D1CBBB]/30 dark:border-[#384133] min-h-[48px]">
           {optionsKoerper.map((item, idx) => (
             <div 
               key={idx} 
-              className="inline-flex items-center gap-1.5 bg-[#E3DEC6] border border-[#D1CBBB] text-[#3D3D3D] text-xs font-semibold pl-3 pr-1.5 py-1.5 rounded-full"
+              className="inline-flex items-center gap-1.5 bg-[#E3DEC6] dark:bg-[#2A3126] border border-[#D1CBBB] dark:border-[#384133] text-[#3D3D3D] dark:text-[#EAE6DB] text-xs font-semibold pl-3 pr-1.5 py-1.5 rounded-full"
             >
               <span>{item}</span>
-              <div className="flex items-center gap-0.5 border-l border-[#D1CBBB]/60 pl-1.5 ml-1">
+              <div className="flex items-center gap-0.5 border-l border-[#D1CBBB]/60 dark:border-[#384133] pl-1.5 ml-1">
                 <button 
                   onClick={() => handleEditKoerper(idx)}
-                  className="text-gray-500 hover:text-[#728264] p-0.5 rounded-sm"
+                  className="text-gray-500 dark:text-[#A1A89A] hover:text-[#728264] dark:hover:text-[#9BB08A] p-0.5 rounded-sm"
                   title="Bearbeiten"
                 >
                   <Edit2 size={12} />
                 </button>
                 <button 
                   onClick={() => handleRemoveKoerper(idx)}
-                  className="text-gray-500 hover:text-[#804A4A] p-0.5 rounded-sm"
+                  className="text-gray-500 dark:text-[#A1A89A] hover:text-[#804A4A] dark:hover:text-[#D47070] p-0.5 rounded-sm"
                   title="Entfernen"
                 >
                   <Trash2 size={12} />
@@ -305,11 +344,11 @@ export default function SettingsView({
             value={newKoerper}
             onChange={(e) => setNewKoerper(e.target.value)}
             placeholder="Neue Reaktion eintragen..."
-            className="flex-1 px-3.5 py-2 rounded-xl border border-[#D1CBBB] bg-[#FCFAF5] text-[#3D3D3D] text-sm focus:border-[#728264] outline-none transition-all"
+            className="flex-1 px-3.5 py-2 rounded-xl border border-[#D1CBBB] dark:border-[#384133] bg-[#FCFAF5] dark:bg-[#1C211B] text-[#3D3D3D] dark:text-[#EAE6DB] placeholder:text-gray-400 dark:placeholder:text-[#838F7A] text-sm focus:border-[#728264] outline-none transition-all"
           />
           <button
             type="submit"
-            className="bg-[#728264] hover:bg-[#5f6d53] text-white p-2.5 rounded-xl transition-all shadow-xs"
+            className="bg-[#728264] dark:bg-[#5C6B50] hover:bg-[#5f6d53] text-white p-2.5 rounded-xl transition-all shadow-xs"
           >
             <Plus size={18} />
           </button>
@@ -317,15 +356,15 @@ export default function SettingsView({
       </div>
 
       {/* 3. Export / Import Backup */}
-      <div className="bg-[#F4F1EA] rounded-2xl border border-[#D1CBBB]/50 p-5 shadow-sm space-y-4">
+      <div className="bg-[#F4F1EA] dark:bg-[#252B21] rounded-2xl border border-[#D1CBBB]/50 dark:border-[#384133] p-5 shadow-sm space-y-4 transition-colors">
         <div>
-          <h3 className="font-bold text-base text-[#3D3D3D] mb-0.5">Datensicherung (Backup)</h3>
-          <p className="text-xs text-gray-500">Da deine Daten ausschließlich offline auf deinem Gerät (Browser) gesichert werden, solltest du regelmäßig Backups exportieren.</p>
+          <h3 className="font-bold text-base text-[#3D3D3D] dark:text-[#EAE6DB] mb-0.5">Datensicherung (Backup)</h3>
+          <p className="text-xs text-gray-500 dark:text-[#A1A89A]">Da deine Daten ausschließlich offline auf deinem Gerät (Browser) gesichert werden, solltest du regelmäßig Backups exportieren.</p>
         </div>
 
         {importStatus.type && (
           <div className={`p-3.5 rounded-xl text-xs font-semibold ${
-            importStatus.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+            importStatus.type === 'success' ? 'bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300' : 'bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300'
           }`}>
             {importStatus.message}
           </div>
@@ -335,7 +374,7 @@ export default function SettingsView({
           <button
             type="button"
             onClick={exportBackup}
-            className="flex items-center justify-center gap-2 py-3 px-4 bg-[#728264] hover:bg-[#5f6d53] text-white font-bold rounded-xl text-sm transition-all shadow-sm"
+            className="flex items-center justify-center gap-2 py-3 px-4 bg-[#728264] dark:bg-[#5C6B50] hover:bg-[#5f6d53] text-white font-bold rounded-xl text-sm transition-all shadow-sm"
           >
             <Download size={16} />
             Backup herunterladen (.json)
@@ -344,7 +383,7 @@ export default function SettingsView({
           <button
             type="button"
             onClick={triggerFileSelect}
-            className="flex items-center justify-center gap-2 py-3 px-4 bg-transparent text-[#728264] border-2 border-[#728264] hover:bg-[#728264]/5 font-bold rounded-xl text-sm transition-all"
+            className="flex items-center justify-center gap-2 py-3 px-4 bg-transparent text-[#728264] dark:text-[#9BB08A] border-2 border-[#728264] dark:border-[#9BB08A] hover:bg-[#728264]/5 font-bold rounded-xl text-sm transition-all"
           >
             <Upload size={16} />
             Backup wiederherstellen
@@ -361,18 +400,18 @@ export default function SettingsView({
       </div>
 
       {/* 4. Danger Zone */}
-      <div className="bg-red-50 border border-red-200 rounded-2xl p-5 space-y-3">
-        <div className="flex items-center gap-2 text-[#804A4A]">
+      <div className="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 rounded-2xl p-5 space-y-3 transition-colors">
+        <div className="flex items-center gap-2 text-[#804A4A] dark:text-[#D47070]">
           <AlertTriangle size={18} />
           <h4 className="font-bold text-sm">Gefahrenzone</h4>
         </div>
-        <p className="text-xs text-gray-600 leading-relaxed">
+        <p className="text-xs text-gray-600 dark:text-[#C5C0B4] leading-relaxed">
           Durch das Zurücksetzen der App-Daten werden alle deine erstellten Logbucheinträge sowie deine personalisierten Gefühle und Reaktionen unwiderruflich gelöscht.
         </p>
         <button
           type="button"
           onClick={onResetAll}
-          className="flex items-center justify-center gap-2 py-2.5 px-4 bg-[#804A4A] hover:bg-[#6c3a3a] text-white font-bold rounded-xl text-xs transition-all shadow-sm"
+          className="flex items-center justify-center gap-2 py-2.5 px-4 bg-[#804A4A] dark:bg-[#B35252] hover:bg-[#6c3a3a] text-white font-bold rounded-xl text-xs transition-all shadow-sm"
         >
           <RefreshCw size={14} />
           App-Daten komplett zurücksetzen
@@ -382,3 +421,4 @@ export default function SettingsView({
     </div>
   );
 }
+
