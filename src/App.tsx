@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { LogEntry, ViewType } from './types';
 import { KEYS, DEFAULT_GEFUEHLE, DEFAULT_KOERPER } from './constants';
@@ -20,6 +20,40 @@ export default function App() {
     if (newIndex !== currentIndex) {
       setDirection(newIndex > currentIndex ? 1 : -1);
       setCurrentView(newView);
+    }
+  };
+
+  // Touch Swipe Navigation Ref (works everywhere on screen, inputs, background, cards)
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null || touchStartY.current === null) return;
+
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+
+    const deltaX = touchEndX - touchStartX.current;
+    const deltaY = touchEndY - touchStartY.current;
+
+    touchStartX.current = null;
+    touchStartY.current = null;
+
+    // Minimum distance threshold (50px) and horizontal angle check
+    if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY) * 1.3) {
+      const currentIndex = viewsOrder.indexOf(currentView);
+      if (deltaX < 0 && currentIndex < viewsOrder.length - 1) {
+        // Swipe Left -> Next Tab
+        changeView(viewsOrder[currentIndex + 1]);
+      } else if (deltaX > 0 && currentIndex > 0) {
+        // Swipe Right -> Previous Tab
+        changeView(viewsOrder[currentIndex - 1]);
+      }
     }
   };
 
@@ -191,14 +225,18 @@ export default function App() {
       </header>
 
       {/* Main View Sandbox */}
-      <main className="flex-1 px-4 py-6 md:py-10 max-w-7xl w-full mx-auto pb-28 md:pb-36 overflow-x-hidden">
+      <main 
+        className="flex-1 px-4 py-6 md:py-10 max-w-7xl w-full mx-auto pb-28 md:pb-36 overflow-x-hidden min-h-[calc(100vh-140px)] flex flex-col"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <AnimatePresence mode="popLayout" custom={direction} initial={false}>
           <motion.div
             key={currentView}
             custom={direction}
             variants={{
               enter: (dir: number) => ({
-                x: dir > 0 ? '60%' : '-60%',
+                x: dir > 0 ? '50%' : '-50%',
                 opacity: 0,
               }),
               center: {
@@ -206,7 +244,7 @@ export default function App() {
                 opacity: 1,
               },
               exit: (dir: number) => ({
-                x: dir < 0 ? '60%' : '-60%',
+                x: dir < 0 ? '50%' : '-50%',
                 opacity: 0,
               }),
             }}
@@ -217,23 +255,7 @@ export default function App() {
               x: { type: 'spring', stiffness: 300, damping: 30 },
               opacity: { duration: 0.15 }
             }}
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.15}
-            onDragEnd={(_, info) => {
-              const swipeThreshold = 60;
-              const currentIndex = viewsOrder.indexOf(currentView);
-              if (info.offset.x < -swipeThreshold || info.velocity.x < -400) {
-                if (currentIndex < viewsOrder.length - 1) {
-                  changeView(viewsOrder[currentIndex + 1]);
-                }
-              } else if (info.offset.x > swipeThreshold || info.velocity.x > 400) {
-                if (currentIndex > 0) {
-                  changeView(viewsOrder[currentIndex - 1]);
-                }
-              }
-            }}
-            className="w-full touch-pan-y"
+            className="w-full flex-1 flex flex-col min-h-full touch-pan-y"
           >
             {currentView === 'form' && (
               <EntryForm
