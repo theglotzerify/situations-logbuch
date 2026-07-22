@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { LogEntry, ViewType } from './types';
 import { KEYS, DEFAULT_GEFUEHLE, DEFAULT_KOERPER } from './constants';
 import EntryForm from './components/EntryForm';
@@ -9,40 +10,16 @@ import { PenSquare, BookOpen, BarChart3, Settings, Heart, Sun, Moon } from 'luci
 
 export default function App() {
   const [currentView, setCurrentView] = useState<ViewType>('form');
-  
-  // Touch Swipe Navigation Ref
-  const touchStartX = useRef<number | null>(null);
-  const touchStartY = useRef<number | null>(null);
+  const [direction, setDirection] = useState<number>(1);
 
   const viewsOrder: ViewType[] = ['form', 'list', 'stats', 'settings'];
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-    touchStartY.current = e.touches[0].clientY;
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current === null || touchStartY.current === null) return;
-
-    const touchEndX = e.changedTouches[0].clientX;
-    const touchEndY = e.changedTouches[0].clientY;
-
-    const deltaX = touchEndX - touchStartX.current;
-    const deltaY = touchEndY - touchStartY.current;
-
-    touchStartX.current = null;
-    touchStartY.current = null;
-
-    // Minimum distance threshold (60px) and horizontal angle check
-    if (Math.abs(deltaX) > 60 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
-      const currentIndex = viewsOrder.indexOf(currentView);
-      if (deltaX < 0 && currentIndex < viewsOrder.length - 1) {
-        // Swipe Left -> Next Tab
-        setCurrentView(viewsOrder[currentIndex + 1]);
-      } else if (deltaX > 0 && currentIndex > 0) {
-        // Swipe Right -> Previous Tab
-        setCurrentView(viewsOrder[currentIndex - 1]);
-      }
+  const changeView = (newView: ViewType) => {
+    const currentIndex = viewsOrder.indexOf(currentView);
+    const newIndex = viewsOrder.indexOf(newView);
+    if (newIndex !== currentIndex) {
+      setDirection(newIndex > currentIndex ? 1 : -1);
+      setCurrentView(newView);
     }
   };
 
@@ -140,23 +117,23 @@ export default function App() {
       // Editing
       updatedEntries[editingIndex] = entry;
       setEditingIndex(null);
-      setCurrentView('list');
+      changeView('list');
     } else {
       // New Entry
       updatedEntries.push(entry);
-      setCurrentView('list');
+      changeView('list');
     }
     handleUpdateEntries(updatedEntries);
   };
 
   const handleEditEntrySelect = (index: number) => {
     setEditingIndex(index);
-    setCurrentView('form');
+    changeView('form');
   };
 
   const handleCancelEdit = () => {
     setEditingIndex(null);
-    setCurrentView('list');
+    changeView('list');
   };
 
   const handleDeleteEntry = (index: number) => {
@@ -176,7 +153,7 @@ export default function App() {
         setOptionsGefuehle([...DEFAULT_GEFUEHLE]);
         setOptionsKoerper([...DEFAULT_KOERPER]);
         setEditingIndex(null);
-        setCurrentView('form');
+        changeView('form');
         alert('Alle Daten wurden erfolgreich gelöscht und auf Werkseinstellungen zurückgesetzt.');
       }
     }
@@ -190,7 +167,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#4A5340] dark:bg-[#181C17] text-[#3D3D3D] dark:text-[#EAE6DB] flex flex-col font-sans selection:bg-[#728264] selection:text-white transition-colors">
+    <div className="min-h-screen bg-[#4A5340] dark:bg-[#181C17] text-[#3D3D3D] dark:text-[#EAE6DB] flex flex-col font-sans selection:bg-[#728264] selection:text-white transition-colors overflow-x-hidden">
       
       {/* Header Bar */}
       <header className="w-full bg-[#4A5340] dark:bg-[#181C17] py-4 px-4 text-center shrink-0 border-b border-[#FCFAF5]/10 dark:border-[#384133] sticky top-0 z-40 transition-colors">
@@ -214,50 +191,89 @@ export default function App() {
       </header>
 
       {/* Main View Sandbox */}
-      <main 
-        className="flex-1 px-4 py-6 md:py-10 max-w-7xl w-full mx-auto pb-28 md:pb-36"
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-      >
-        <div className="animate-fadeIn">
-          {currentView === 'form' && (
-            <EntryForm
-              editEntry={editingIndex !== null ? entries[editingIndex] : null}
-              onSave={handleSaveEntry}
-              onCancelEdit={handleCancelEdit}
-              optionsGefuehle={optionsGefuehle}
-              optionsKoerper={optionsKoerper}
-            />
-          )}
+      <main className="flex-1 px-4 py-6 md:py-10 max-w-7xl w-full mx-auto pb-28 md:pb-36 overflow-x-hidden">
+        <AnimatePresence mode="popLayout" custom={direction} initial={false}>
+          <motion.div
+            key={currentView}
+            custom={direction}
+            variants={{
+              enter: (dir: number) => ({
+                x: dir > 0 ? '60%' : '-60%',
+                opacity: 0,
+              }),
+              center: {
+                x: 0,
+                opacity: 1,
+              },
+              exit: (dir: number) => ({
+                x: dir < 0 ? '60%' : '-60%',
+                opacity: 0,
+              }),
+            }}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              x: { type: 'spring', stiffness: 300, damping: 30 },
+              opacity: { duration: 0.15 }
+            }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.15}
+            onDragEnd={(_, info) => {
+              const swipeThreshold = 60;
+              const currentIndex = viewsOrder.indexOf(currentView);
+              if (info.offset.x < -swipeThreshold || info.velocity.x < -400) {
+                if (currentIndex < viewsOrder.length - 1) {
+                  changeView(viewsOrder[currentIndex + 1]);
+                }
+              } else if (info.offset.x > swipeThreshold || info.velocity.x > 400) {
+                if (currentIndex > 0) {
+                  changeView(viewsOrder[currentIndex - 1]);
+                }
+              }
+            }}
+            className="w-full touch-pan-y"
+          >
+            {currentView === 'form' && (
+              <EntryForm
+                editEntry={editingIndex !== null ? entries[editingIndex] : null}
+                onSave={handleSaveEntry}
+                onCancelEdit={handleCancelEdit}
+                optionsGefuehle={optionsGefuehle}
+                optionsKoerper={optionsKoerper}
+              />
+            )}
 
-          {currentView === 'list' && (
-            <EntryList
-              entries={entries}
-              onEdit={handleEditEntrySelect}
-              onDelete={handleDeleteEntry}
-              optionsGefuehle={optionsGefuehle}
-              optionsKoerper={optionsKoerper}
-            />
-          )}
+            {currentView === 'list' && (
+              <EntryList
+                entries={entries}
+                onEdit={handleEditEntrySelect}
+                onDelete={handleDeleteEntry}
+                optionsGefuehle={optionsGefuehle}
+                optionsKoerper={optionsKoerper}
+              />
+            )}
 
-          {currentView === 'stats' && (
-            <Statistics entries={entries} />
-          )}
+            {currentView === 'stats' && (
+              <Statistics entries={entries} />
+            )}
 
-          {currentView === 'settings' && (
-            <SettingsView
-              optionsGefuehle={optionsGefuehle}
-              optionsKoerper={optionsKoerper}
-              entries={entries}
-              darkMode={darkMode}
-              onToggleDarkMode={handleToggleDarkMode}
-              onUpdateGefuehle={handleUpdateGefuehle}
-              onUpdateKoerper={handleUpdateKoerper}
-              onUpdateEntries={handleUpdateEntries}
-              onResetAll={handleResetAllData}
-            />
-          )}
-        </div>
+            {currentView === 'settings' && (
+              <SettingsView
+                optionsGefuehle={optionsGefuehle}
+                optionsKoerper={optionsKoerper}
+                entries={entries}
+                darkMode={darkMode}
+                onToggleDarkMode={handleToggleDarkMode}
+                onUpdateGefuehle={handleUpdateGefuehle}
+                onUpdateKoerper={handleUpdateKoerper}
+                onUpdateEntries={handleUpdateEntries}
+                onResetAll={handleResetAllData}
+              />
+            )}
+          </motion.div>
+        </AnimatePresence>
       </main>
 
       {/* Android Mobile & Tablet Floating Bottom Bar */}
@@ -265,7 +281,7 @@ export default function App() {
         
         {/* Navigation buttons */}
         <button
-          onClick={() => { setEditingIndex(null); setCurrentView('form'); }}
+          onClick={() => { setEditingIndex(null); changeView('form'); }}
           className={`flex flex-col items-center justify-center gap-1.5 py-1 px-4 rounded-xl transition-all text-xs font-bold active:scale-95 ${
             currentView === 'form' 
               ? 'text-[#728264] dark:text-[#9BB08A] scale-105' 
@@ -277,7 +293,7 @@ export default function App() {
         </button>
 
         <button
-          onClick={() => setCurrentView('list')}
+          onClick={() => changeView('list')}
           className={`flex flex-col items-center justify-center gap-1.5 py-1 px-4 rounded-xl transition-all text-xs font-bold active:scale-95 ${
             currentView === 'list' 
               ? 'text-[#728264] dark:text-[#9BB08A] scale-105' 
@@ -289,7 +305,7 @@ export default function App() {
         </button>
 
         <button
-          onClick={() => setCurrentView('stats')}
+          onClick={() => changeView('stats')}
           className={`flex flex-col items-center justify-center gap-1.5 py-1 px-4 rounded-xl transition-all text-xs font-bold active:scale-95 ${
             currentView === 'stats' 
               ? 'text-[#728264] dark:text-[#9BB08A] scale-105' 
@@ -301,7 +317,7 @@ export default function App() {
         </button>
 
         <button
-          onClick={() => setCurrentView('settings')}
+          onClick={() => changeView('settings')}
           className={`flex flex-col items-center justify-center gap-1.5 py-1 px-4 rounded-xl transition-all text-xs font-bold active:scale-95 ${
             currentView === 'settings' 
               ? 'text-[#728264] dark:text-[#9BB08A] scale-105' 
